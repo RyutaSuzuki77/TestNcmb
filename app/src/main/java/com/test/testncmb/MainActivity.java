@@ -29,24 +29,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //SDKの初期化
         NCMB.initialize(this.getApplicationContext(),app_key,client_key);
-        //
+        //クエリの作成(データストアのクラス名指定)
         final NCMBQuery<NCMBObject> query = new NCMBQuery<>("Testclass");
+        //データストアのmessageカラムに"ドラゴン"があるか検索
         query.whereEqualTo("message", "ドラゴン");
-        //query.setLimit(1);
         final Context context = getApplicationContext();
         Button button = findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //データ検索
                 query.findInBackground(new FindCallback<NCMBObject>() {
                     @Override
                     public void done(List<NCMBObject> list, NCMBException e) {
                         if(e != null){
-                            Toast.makeText(context, "データストアに存在しません。", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "検索エラー。", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(context, "データストアに存在します。", Toast.LENGTH_LONG).show();
+                            if(list.isEmpty()){
+                                Toast.makeText(context, "データストアに存在しません。", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, "データストアに存在します。", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 });
