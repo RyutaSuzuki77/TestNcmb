@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         //
         final NCMBQuery<NCMBObject> query = new NCMBQuery<>("Testclass");
         query.whereEqualTo("message", "ドラゴン");
+        query.setLimit(1);
         //query.setLimit(1);
         final Context context = getApplicationContext();
         Button button = findViewById(R.id.button);
@@ -39,14 +40,17 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 query.findInBackground(new FindCallback<NCMBObject>() {
                     @Override
                     public void done(List<NCMBObject> list, NCMBException e) {
                         if(e != null){
-                            Toast.makeText(context, "データストアに存在しません。", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "検索エラー", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(context, "データストアに存在します。", Toast.LENGTH_LONG).show();
+                            if (list.isEmpty()) {
+                                Toast.makeText(context, "データストアに存在しません。", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, "データストアに存在しています。", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 });
